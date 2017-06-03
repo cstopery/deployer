@@ -1,11 +1,6 @@
 var app = app || {};
 
 (function ($) {
-    var SUCCESSFUL = 0;
-    var UNTESTED   = 1;
-    var FAILED     = 2;
-    var TESTING    = 3;
-
     // FIXME: This seems very wrong
     $('#server_template').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
@@ -24,9 +19,10 @@ var app = app || {};
         } else {
             $('#server_template_id').val('');
             $('#server_template_name').val('');
+            $('#server_template_user').val('');
+            $('#server_template_path').val('');
             $('#server_template_address').val('');
             $('#server_template_port').val('22');
-            $('#add-server-command', modal).show();
         }
 
         modal.find('.modal-title span').text(title);
@@ -84,6 +80,8 @@ var app = app || {};
             name:         $('#server_template_name').val(),
             ip_address:   $('#server_template_address').val(),
             port:         $('#server_template_port').val(),
+            user:         $('#server_template_user').val(),
+            path:         $('#server_template_path').val(),
             add_commands: $('#server_commands').is(':checked')
         }, {
             wait: true,
@@ -171,9 +169,7 @@ var app = app || {};
             });
 
             app.listener.on('serverTemplate:REBELinBLUE\\Deployer\\Events\\ModelCreated', function (data) {
-                if (parseInt(data.model.project_id) === parseInt(app.project_id)) {
-                    app.ServerTemplates.add(data.model);
-                }
+                app.ServerTemplates.add(data.model);
             });
 
             app.listener.on('serverTemplate:REBELinBLUE\\Deployer\\Events\\ModelTrashed', function (data) {
@@ -221,23 +217,23 @@ var app = app || {};
         render: function () {
             var data = this.model.toJSON();
 
-            data.status_css = 'primary';
-            data.icon_css   = 'question';
-            data.status     = Lang.get('servers.untested');
-
-            if (parseInt(this.model.get('status')) === SUCCESSFUL) {
-                data.status_css = 'success';
-                data.icon_css   = 'check';
-                data.status     = Lang.get('servers.successful');
-            } else if (parseInt(this.model.get('status')) === TESTING) {
-                data.status_css = 'warning';
-                data.icon_css   = 'spinner fa-pulse';
-                data.status     = Lang.get('servers.testing');
-            } else if (parseInt(this.model.get('status')) === FAILED) {
-                data.status_css = 'danger';
-                data.icon_css   = 'warning';
-                data.status     = Lang.get('servers.failed');
-            }
+            // data.status_css = 'primary';
+            // data.icon_css   = 'question';
+            // data.status     = Lang.get('servers.untested');
+            //
+            // if (parseInt(this.model.get('status')) === SUCCESSFUL) {
+            //     data.status_css = 'success';
+            //     data.icon_css   = 'check';
+            //     data.status     = Lang.get('servers.successful');
+            // } else if (parseInt(this.model.get('status')) === TESTING) {
+            //     data.status_css = 'warning';
+            //     data.icon_css   = 'spinner fa-pulse';
+            //     data.status     = Lang.get('servers.testing');
+            // } else if (parseInt(this.model.get('status')) === FAILED) {
+            //     data.status_css = 'danger';
+            //     data.icon_css   = 'warning';
+            //     data.status     = Lang.get('servers.failed');
+            // }
 
             this.$el.html(this.template(data));
 
@@ -249,26 +245,29 @@ var app = app || {};
             $('#server_template_name').val(this.model.get('name'));
             $('#server_template_address').val(this.model.get('ip_address'));
             $('#server_template_port').val(this.model.get('port'));
-        },
-        testConnection: function() {
-            if (parseInt(this.model.get('status')) === TESTING) {
-                return;
-            }
-
-            this.model.set({
-                status: TESTING
-            });
-
-            var that = this;
-            $.ajax({
-                type: 'POST',
-                //url: '/projects/' + this.model.get('project_id') + this.model.urlRoot + '/' + this.model.id + '/test'
-                url: this.model.urlRoot + '/' + this.model.id + '/test'
-            }).fail(function (response) {
-                that.model.set({
-                    status: FAILED
-                });
-            });
+            $('#server_template_user').val(this.model.get('user'));
+            $('#server_template_path').val(this.model.get('path'));
         }
+        //,
+        // testConnection: function() {
+        //     if (parseInt(this.model.get('status')) === TESTING) {
+        //         return;
+        //     }
+        //
+        //     this.model.set({
+        //         status: TESTING
+        //     });
+        //
+        //     var that = this;
+        //     $.ajax({
+        //         type: 'POST',
+        //         //url: '/projects/' + this.model.get('project_id') + this.model.urlRoot + '/' + this.model.id + '/test'
+        //         url: this.model.urlRoot + '/' + this.model.id + '/test'
+        //     }).fail(function (response) {
+        //         that.model.set({
+        //             status: FAILED
+        //         });
+        //     });
+        // }
     });
 })(jQuery);

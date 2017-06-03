@@ -17,6 +17,8 @@ return [
     'test'               => 'Test the server connection',
     'path'               => 'Project Path',
     'example'            => 'The directory needs to exist on the server already & be both readable and writeable',
+    'template_user'      => 'Can be overwritten when assigning the server to a project',
+    'template_path'      => 'If supplied, will be used as a prefix for the path provided in the project',
     'warning'            => 'The server could not be saved, please check the form below.',
     'successful'         => 'Successful',
     'testing'            => 'Testing',
@@ -28,6 +30,7 @@ return [
     'add_command'        => 'Add the new server to all existing commands',
     'manage'             => 'Manage Servers',
     'server_details'     => 'Server Details',
-    'load_from_template' => 'Load Template',
-    'load_template'      => 'Load Template',
+    'load_from_template' => 'Shared Servers',
+    'load_template'      => 'Use Shared Server',
+
 ];

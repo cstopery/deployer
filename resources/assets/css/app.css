@@ -201,20 +201,24 @@ input#verify-google-code {
     width: 35%;
 }
 
-div#project div.modal-body {
+div#project div.modal-body,
+div#server div.modal-body {
     padding: 0;
 }
 
-div#project div.nav-tabs-custom {
+div#project div.nav-tabs-custom,
+div#server div.nav-tabs-custom {
     margin-bottom: 0;
     box-shadow: none;
 }
 
-div#project div.nav-tabs-custom > .tab-content {
+div#project div.nav-tabs-custom > .tab-content,
+div#server div.nav-tabs-custom > .tab-content {
     padding: 15px;
 }
 
-div#project div.callout-danger {
+div#project div.callout-danger,
+div#server div.callout-danger {
     margin: 15px;
 }
 

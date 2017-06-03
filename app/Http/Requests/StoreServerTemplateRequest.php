@@ -15,9 +15,11 @@ class StoreServerTemplateRequest extends Request
     public function rules()
     {
         return [
-            'name'      => 'required|max:255',
-            'ip_address'=> 'required|host',
-            'port'      => 'required|integer|min:0|max:65535',
+            'name'       => 'required|max:255',
+            'user'       => 'max:255',
+            'ip_address' => 'required|host',
+            'port'       => 'required|integer|min:0|max:65535',
+            'path'       => 'required',
         ];
     }
 }

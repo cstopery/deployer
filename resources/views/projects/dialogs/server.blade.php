@@ -13,10 +13,12 @@
                         <i class="icon fa fa-warning"></i> {{ trans('servers.warning') }}
                     </div>
                     <div class="nav-tabs-custom">
+                        @if ($server_templates->count() > 0)
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#server_details" data-toggle="tab">{{ trans('servers.server_details') }}</a></li>
                             <li><a href="#load_from_template" data-toggle="tab">{{ trans('servers.load_from_template') }}</a></li>
                         </ul>
+                        @endif
                         <div class="tab-content">
                             <div class="tab-pane active" id="server_details">
                                 <div class="form-group">
@@ -73,19 +75,20 @@
                                     @endif
                                 </div>
                             </div>
+
+                            @if ($server_templates->count() > 0)
                             <div class="tab-pane" id="load_from_template">
                                 <table class="table table-condensed table-stripped">
                                     <thead>
-                                    <tr>
-                                        <th>{{ trans('servers.name') }}</th>
-                                        <th>{{ trans('servers.ip_address') }}</th>
-                                        <th>{{ trans('servers.port') }}</th>
-                                        <th></th>
-                                    </tr>
+                                        <tr>
+                                            <th>{{ trans('servers.name') }}</th>
+                                            <th>{{ trans('servers.ip_address') }}</th>
+                                            <th>{{ trans('servers.port') }}</th>
+                                            <th></th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    @if (isset($server_templates))
-                                    @foreach ($server_templates as $template)
+                                        @foreach ($server_templates as $template)
                                         <tr>
                                             <td>{{ $template->name  }}</td>
                                             <td>{{ $template->ip_address  }}</td>
@@ -94,11 +97,11 @@
                                                 <button type="button" data-server-template-id="{{ $template->id }}" class="btn btn-default btn-edit pull-right" title="{{ trans('servers.load_template') }}"><i class="fa fa-upload"></i></button>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                    @endif
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>

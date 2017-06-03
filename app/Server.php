@@ -39,11 +39,12 @@ class Server extends Model
      * @var array
      */
     protected $casts = [
-        'id'          => 'integer',
-        'project_id'  => 'integer',
-        'status'      => 'integer',
-        'deploy_code' => 'boolean',
-        'port'        => 'integer',
+        'id'                 => 'integer',
+        'project_id'         => 'integer',
+        'server_template_id' => 'integer',
+        'status'             => 'integer',
+        'deploy_code'        => 'boolean',
+        'port'               => 'integer',
     ];
 
     /**
@@ -54,6 +55,16 @@ class Server extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Belongs to relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function template()
+    {
+        return $this->belongsTo(ServerTemplate::class);
     }
 
     /**
