@@ -107,26 +107,4 @@ class ServerController extends Controller
             'success' => true,
         ];
     }
-
-    /**
-     * Get server suggestions by name from the existed servers.
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
-    public function autoComplete(Request $request)
-    {
-        $servers = [];
-        $query   = $request->get('query');
-
-        if ($query) {
-            $servers = $this->repository->queryByName($query);
-        }
-
-        return [
-            'query'       => $query,
-            'suggestions' => $servers,
-        ];
-    }
 }

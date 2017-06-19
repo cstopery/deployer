@@ -35,11 +35,4 @@ interface ServerTemplateRepositoryInterface
      * @return bool
      */
     public function deleteById($model_id);
-
-    /**
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function queryByName($name);
 }

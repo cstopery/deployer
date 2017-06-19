@@ -19,7 +19,6 @@ class StoreServerTemplateRequest extends Request
             'user'       => 'max:255',
             'ip_address' => 'required|host',
             'port'       => 'required|integer|min:0|max:65535',
-            'path'       => 'required',
         ];
     }
 }

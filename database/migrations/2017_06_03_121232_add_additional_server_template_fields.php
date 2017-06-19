@@ -14,8 +14,8 @@ class AddAdditionalServerTemplateFields extends Migration
     public function up()
     {
         Schema::table('server_templates', function (Blueprint $table) {
-            $table->string('user');
-            $table->string('path');
+            $table->string('user')->nullable();
+            $table->string('path')->nullable();
             $table->integer('port')->default(22)->change();
         });
     }
@@ -28,7 +28,7 @@ class AddAdditionalServerTemplateFields extends Migration
     public function down()
     {
         Schema::table('server_templates', function (Blueprint $table) {
-            $table->dropColumn(['name', 'user', 'path']);
+            $table->dropColumn(['user', 'path']);
             $table->integer('port')->default(null);
         });
     }

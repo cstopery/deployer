@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use REBELinBLUE\Deployer\Server;
+use REBELinBLUE\Deployer\ServerTemplate;
 
 class ServerTableSeeder extends Seeder
 {
@@ -9,23 +10,17 @@ class ServerTableSeeder extends Seeder
     {
         DB::table('servers')->delete();
 
-        Server::create([
-            'name'        => 'Web VM',
-            'ip_address'  => '192.168.33.50',
-            'user'        => 'deploy',
-            'path'        => '/var/www',
-            'project_id'  => 1,
-            'deploy_code' => true,
-        ]);
-
-        Server::create([
-            'name'        => 'Cron VM',
-            'ip_address'  => '192.168.33.60',
-            'user'        => 'deploy',
-            'path'        => '/var/www',
-            'project_id'  => 1,
-            'deploy_code' => true,
-        ]);
+        foreach (ServerTemplate::all() as $template) {
+            Server::create([
+                'name'               => $template->name,
+                'ip_address'         => $template->ip_address,
+                'user'               => $template->user,
+                'path'               => '/',
+                'project_id'         => 1,
+                'deploy_code'        => true,
+                'server_template_id' => $template->id
+            ]);
+        }
 
         Server::create([
             'name'        => 'Database VM',

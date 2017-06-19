@@ -87,16 +87,4 @@ class EloquentServerRepository extends EloquentRepository implements ServerRepos
             $this->dispatch(new TestServerConnection($server));
         }
     }
-
-    /**
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function queryByName($name)
-    {
-        return $this->model
-                    ->where('name', 'LIKE', "%{$name}%")
-                    ->get();
-    }
 }

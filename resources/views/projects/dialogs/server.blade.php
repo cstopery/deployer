@@ -8,6 +8,7 @@
             <form role="form">
                 <input type="hidden" id="server_id" name="id"/>
                 <input type="hidden" name="project_id" value="{{ $project->id }}"/>
+                <input type="hidden" id="server_template_id" name="server_template_id" />
                 <div class="modal-body">
                     <div class="callout callout-danger">
                         <i class="icon fa fa-warning"></i> {{ trans('servers.warning') }}

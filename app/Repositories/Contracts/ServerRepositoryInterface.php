@@ -40,11 +40,4 @@ interface ServerRepositoryInterface
      * @param int $model_id
      */
     public function queueForTesting($model_id);
-
-    /**
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function queryByName($name);
 }

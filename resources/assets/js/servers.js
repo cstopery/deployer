@@ -42,9 +42,12 @@ var app = app || {};
         $('.label-danger', modal).remove();
         $('#add-server-command', modal).hide();
 
+        $('.nav-tabs', modal).show();
+
         if (button.hasClass('btn-edit')) {
             title = Lang.get('servers.edit');
             $('.btn-danger', modal).show();
+            $('.nav-tabs', modal).hide();
         } else {
             $('#server_id').val('');
             $('#server_name').val('');
@@ -53,38 +56,14 @@ var app = app || {};
             $('#server_user').val('');
             $('#server_path').val('');
             $('#server_deploy_code').prop('checked', true);
+            $('#server_template_id').val('');
+            $('#server_name').prop('disabled', false);
+            $('#server_address').prop('disabled', false);
+            $('#server_port').prop('disabled', false);
             $('#add-server-command', modal).show();
         }
 
         modal.find('.modal-title span').text(title);
-    });
-
-    // FIXME: This seems very wrong
-    $('#server #server_name').autocomplete({
-        serviceUrl: '/servers/autocomplete',
-        dataType: 'json',
-        noCache: true,
-        preserveInput: true,
-        transformResult: function (response) {
-            return {
-                suggestions: $.map(response.suggestions, function (dataItem) {
-                    var value = dataItem.name + ' (' + dataItem.user + '@' + dataItem.ip_address + ')';
-                    return {
-                      value: value,
-                      data: dataItem
-                    };
-                })
-            };
-        },
-        onSelect: function (suggestion) {
-            var server = suggestion.data;
-            $('#server_name').val(server.name);
-            $('#server_address').val(server.ip_address);
-            $('#server_port').val(server.port);
-            $('#server_user').val(server.user);
-            $('#server_path').val(server.path);
-            $('#server_deploy_code').prop('checked', server.deploy_code);
-        }
     });
 
     // FIXME: This seems very wrong
@@ -136,14 +115,15 @@ var app = app || {};
         }
 
         server.save({
-            name:         $('#server_name').val(),
-            ip_address:   $('#server_address').val(),
-            port:         $('#server_port').val(),
-            user:         $('#server_user').val(),
-            path:         $('#server_path').val(),
-            deploy_code:  $('#server_deploy_code').is(':checked'),
-            project_id:   parseInt($('input[name="project_id"]').val()),
-            add_commands: $('#server_commands').is(':checked')
+            name:               $('#server_name').val(),
+            ip_address:         $('#server_address').val(),
+            port:               $('#server_port').val(),
+            user:               $('#server_user').val(),
+            path:               $('#server_path').val(),
+            deploy_code:        $('#server_deploy_code').is(':checked'),
+            project_id:         parseInt($('input[name="project_id"]').val()),
+            server_template_id: parseInt($('#server_template_id').val()),
+            add_commands:       $('#server_commands').is(':checked')
         }, {
             wait: true,
             success: function(model, response, options) {
@@ -191,7 +171,11 @@ var app = app || {};
         $('#server_name').val(server_template.get('name'));
         $('#server_address').val(server_template.get('ip_address'));
         $('#server_port').val(server_template.get('port'));
+        $('#server_template_id').val(server_template_id);
         $('.nav-tabs a[href="#server_details"]').tab('show');
+        $('#server_name').prop('disabled', true);
+        $('#server_address').prop('disabled', true);
+        $('#server_port').prop('disabled', true);
     });
 
     app.Server = Backbone.Model.extend({
@@ -294,6 +278,10 @@ var app = app || {};
             data.icon_css   = 'question';
             data.status     = Lang.get('servers.untested');
             data.has_log    = false;
+            data.type       = Lang.get('servers.project');
+            if (parseInt(this.model.get('server_template_id')) > 0) {
+                data.type = Lang.get('servers.shared');
+            }
 
             if (parseInt(this.model.get('status')) === SUCCESSFUL) {
                 data.status_css = 'success';
@@ -322,6 +310,16 @@ var app = app || {};
             $('#server_port').val(this.model.get('port'));
             $('#server_user').val(this.model.get('user'));
             $('#server_path').val(this.model.get('path'));
+            $('#server_template_id').val(this.model.get('server_template_id'));
+
+            $('#server_name').prop('disabled', false);
+            $('#server_address').prop('disabled', false);
+            $('#server_port').prop('disabled', false);
+            if (parseInt(this.model.get('server_template_id')) > 0) {
+              $('#server_name').prop('disabled', true);
+              $('#server_address').prop('disabled', true);
+              $('#server_port').prop('disabled', true);
+            }
 
             $('#server_deploy_code').prop('checked', (this.model.get('deploy_code') === true));
         },
@@ -344,7 +342,6 @@ var app = app || {};
             var that = this;
             $.ajax({
                 type: 'POST',
-                //url: '/projects/' + this.model.get('project_id') + this.model.urlRoot + '/' + this.model.id + '/test'
                 url: this.model.urlRoot + '/' + this.model.id + '/test'
             }).fail(function (response) {
                 that.model.set({

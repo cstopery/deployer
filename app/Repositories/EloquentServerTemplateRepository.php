@@ -19,15 +19,4 @@ class EloquentServerTemplateRepository extends EloquentRepository implements Ser
     {
         $this->model = $model;
     }
-
-    /**
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function queryByName($name)
-    {
-        /* @var ServerTemplate $model */
-        return $this->model->where('name', '=', $name);
-    }
 }
