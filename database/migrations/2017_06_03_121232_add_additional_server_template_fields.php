@@ -29,7 +29,7 @@ class AddAdditionalServerTemplateFields extends Migration
     {
         Schema::table('server_templates', function (Blueprint $table) {
             $table->dropColumn(['user', 'path']);
-            $table->integer('port')->default(null);
+            $table->integer('port')->default(null)->change();
         });
     }
 }
